@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +19,9 @@ public class MySQLite extends AppCompatActivity {
 
         TextView productID = (TextView) findViewById(R.id.productID);
         TextView productName = (TextView) findViewById(R.id.productName);
+
+        Button viewBttn = (Button) findViewById(R.id.viewBttn);
+        TextView allDbText = (TextView) findViewById(R.id.allDbText);
 
         DatabaseHelper myDB = new DatabaseHelper(MySQLite.this);
 
@@ -35,6 +40,27 @@ public class MySQLite extends AppCompatActivity {
         }else{
             Log.d("Fayed","Record not Deleted");
         }
+
+        viewBttn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Cursor cur = myDB.getListContents();
+                StringBuffer buffer = new StringBuffer();
+
+                while(cur.moveToNext()){
+                    buffer.append("id: "+cur.getString(0)+"\n");
+                    buffer.append("Name: "+cur.getString(1)+"\n\n");
+                }
+                allDbText.setText(buffer.toString());
+
+                //AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                //builder.setCancelable(true);
+                //builder.setTitle("All Emplpyees");
+                //builder.setMessage(buffer.toString());
+                //builder.show();
+
+            }
+        });
 
     }
 }
